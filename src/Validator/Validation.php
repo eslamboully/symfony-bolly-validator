@@ -22,8 +22,6 @@ trait Validation{
       $stmt = $conn->prepare($sql);
       $stmt->execute(['email'=>$email]);
 
-      // returns an array of arrays (i.e. a raw data set)
-      //dd($stmt->fetchAll());
       return empty($stmt->fetchAll()) ? true : false;
   }
 
@@ -33,7 +31,6 @@ trait Validation{
     $messages = [];
 
       foreach ($arr as $index=>$value) {
-          // required
           $val = explode('|',$value);
           foreach ($val as $val2) {
               if($val2 == 'required' || $val2 == 'array')
@@ -64,7 +61,6 @@ trait Validation{
                   $val2 = explode(':',$val2);
                   if(!array_key_exists($index,$messages))
                   {
-                    //dd($this->if_unique($index,$request[$index],$val2[1]));
                       if(!$this->if_unique($index,$request[$index],$val2[1]))
                       {
                           $messages[$index] = $index . ' is used by someone';
@@ -74,11 +70,31 @@ trait Validation{
                   $val2 = explode(':',$val2);
                   if(!array_key_exists($index,$messages))
                   {
-                    //dd($this->if_unique($index,$request[$index],$val2[1]));
-                    
                       if($request[$index] != $request[$val2[1]])
                       {
                           $messages[$index] = $index . ' must be same ' . $val2[1];
+                      }
+                  }
+              }elseif(substr( $val2, 0, 3 ) == "min"){
+                  if(!array_key_exists($index,$messages))
+                  {
+                    //dd($this->if_unique($index,$request[$index],$val2[1]));
+                      $val2 = explode(':',$val2);
+
+                      if(strlen($request[$index]) < $val2[1])
+                      {
+                          $messages[$index] = $index . ' minimum ' . $val2[1] . ' characters';
+                      }
+                  }
+              }elseif(substr( $val2, 0, 3 ) == "max"){
+                  if(!array_key_exists($index,$messages))
+                  {
+                    //dd($this->if_unique($index,$request[$index],$val2[1]));
+                      $val2 = explode(':',$val2);
+
+                      if(strlen($request[$index]) > $val2[1])
+                      {
+                          $messages[$index] = $index . ' maximum ' . $val2[1] . ' characters';
                       }
                   }
               }
