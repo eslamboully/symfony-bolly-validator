@@ -18,9 +18,8 @@ $errors = $this->validate($request->request->all(),[
 
         if(!empty($errors))
         {
-          $this->addFlashArray('errors',$errors);
-          // return $this->redirectToRoute('admin.admins.create',['errors' => $errors]);
-          return $this->redirectToRoute('admin.admins.create');
+            $this->addFlashArray('errors',$errors);
+            return $this->redirectToRoute('admin.admins.create');
         }
         
         
