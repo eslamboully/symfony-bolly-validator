@@ -75,7 +75,8 @@ trait Validation{
                   if(!array_key_exists($index,$messages))
                   {
                     //dd($this->if_unique($index,$request[$index],$val2[1]));
-                      if($index != $request[$val2[1]])
+                    
+                      if($request[$index] != $request[$val2[1]])
                       {
                           $messages[$index] = $index . ' must be same ' . $val2[1];
                       }
