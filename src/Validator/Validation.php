@@ -33,7 +33,7 @@ trait Validation{
       foreach ($arr as $index=>$value) {
           $val = explode('|',$value);
           foreach ($val as $val2) {
-              if($val2 == 'required' || $val2 == 'array')
+              if(($val2 == 'required' || $val2 == 'array') || $val2 == 'email')
               {
                     if($val2 == 'required')
                     {
@@ -56,6 +56,14 @@ trait Validation{
                               $messages[$index] = $index . ' must me an array';
                           }
                         }
+                   }elseif($val2 == 'email'){
+                       if(!array_key_exists($index,$request))
+                       {
+                         $messages[$index] = $index . ' is required';
+                       }elseif(!filter_var($request[$index], FILTER_VALIDATE_EMAIL))
+                       {
+                         $messages[$index] = $index . ' is must be e-mail';
+                       }
                    }
               }elseif(substr( $val2, 0, 6 ) == "unique"){
                   $val2 = explode(':',$val2);
